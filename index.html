@@ -39,8 +39,6 @@
             <option value="10">10 Cards</option>
             <option value="25">25 Cards</option>
             <option value="50">50 Cards</option>
-            <option value="75">75 Cards</option>
-            <option value="100">100 Cards</option>
           </select>
         </div>
       </div>
@@ -52,14 +50,18 @@
           <span class="label">Knowledge Input</span>
           <div id="activeModelBadge" class="badge neon-blue">Gemini 3 Flash</div>
         </div>
-        <textarea
-          id="topicInput"
-          placeholder="What topic would you like to master today? Enter a subject or paste notes..."
-        ></textarea>
+        <div class="search-input-wrapper">
+          <span class="material-symbols-rounded search-icon">search</span>
+          <input
+            type="text"
+            id="topicInput"
+            placeholder="Enter a subject to master (e.g. Quantum Physics, Roman History)..."
+          />
+        </div>
         <div class="card-footer">
           <button id="generateButton">
             <span class="material-symbols-rounded">magic_button</span>
-            Generate Flashcards
+            Generate
           </button>
         </div>
       </div>
@@ -68,22 +70,38 @@
         <div class="card-header">
           <span class="label">Session Status</span>
         </div>
-        <div id="errorMessage" class="status-text">Ready to generate.</div>
+        <div id="errorMessage" class="status-text">Ready.</div>
         <div id="progressContainer" class="progress-ring-container">
-          <svg class="progress-ring" width="100" height="100">
-            <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="6" fill="transparent" r="40" cx="50" cy="50"/>
-            <circle id="loadingCircle" class="progress-ring-fill" stroke="var(--accent-purple)" stroke-width="6" stroke-linecap="round" fill="transparent" r="40" cx="50" cy="50"/>
+          <svg class="progress-ring" width="80" height="80">
+            <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="5" fill="transparent" r="32" cx="40" cy="40"/>
+            <circle id="loadingCircle" class="progress-ring-fill" stroke="var(--accent-purple)" stroke-width="5" stroke-linecap="round" fill="transparent" r="32" cx="40" cy="40"/>
           </svg>
           <div id="ringLabel" class="ring-label">AI</div>
         </div>
       </div>
     </div>
 
+    <section id="overviewSection" class="overview-section hidden">
+      <div class="overview-header-clickable" id="overviewToggle">
+        <div class="overview-title-group">
+          <span class="label">Knowledge Overview</span>
+          <h3 id="overviewTitle">Topic Summary</h3>
+        </div>
+        <span class="material-symbols-rounded toggle-arrow">expand_less</span>
+      </div>
+      <div class="overview-collapsible-content" id="overviewContent">
+        <p id="overviewText">Overview content goes here...</p>
+        <div id="overviewSources" class="overview-sources">
+          <!-- Sources list -->
+        </div>
+      </div>
+    </section>
+
     <section class="results-section">
       <div class="results-header">
-        <h2>Flashcard Summary</h2>
+        <h2>Flashcards</h2>
         <div class="filters">
-          <span class="dot purple"></span> All Cards
+          <span class="dot purple"></span> <span id="cardCountLabel">0</span> Cards Generated
         </div>
       </div>
       <div id="flashcardsContainer" class="flashcards-grid">

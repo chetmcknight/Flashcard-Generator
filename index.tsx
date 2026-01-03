@@ -15,7 +15,13 @@ interface Flashcard {
   sources?: FlashcardSource[];
 }
 
-const topicInput = document.getElementById('topicInput') as HTMLTextAreaElement;
+interface GenerationResponse {
+  overview: string;
+  overviewSources: FlashcardSource[];
+  flashcards: Flashcard[];
+}
+
+const topicInput = document.getElementById('topicInput') as HTMLInputElement;
 const generateButton = document.getElementById('generateButton') as HTMLButtonElement;
 const flashcardsContainer = document.getElementById('flashcardsContainer') as HTMLDivElement;
 const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
@@ -26,6 +32,14 @@ const activeModelBadge = document.getElementById('activeModelBadge') as HTMLDivE
 const loadingCircle = document.getElementById('loadingCircle') as unknown as SVGCircleElement;
 const progressContainer = document.getElementById('progressContainer') as HTMLDivElement;
 const ringLabel = document.getElementById('ringLabel') as HTMLDivElement;
+const cardCountLabel = document.getElementById('cardCountLabel') as HTMLSpanElement;
+
+// Overview elements
+const overviewSection = document.getElementById('overviewSection') as HTMLElement;
+const overviewToggle = document.getElementById('overviewToggle') as HTMLElement;
+const overviewTitle = document.getElementById('overviewTitle') as HTMLHeadingElement;
+const overviewText = document.getElementById('overviewText') as HTMLParagraphElement;
+const overviewSources = document.getElementById('overviewSources') as HTMLDivElement;
 
 let selectedDifficulty = 'medium';
 let selectedModel = 'gemini-3-flash-preview';
@@ -35,7 +49,7 @@ let loadingInterval: number | null = null;
 
 function updateProgress(percent: number) {
   if (!loadingCircle) return;
-  const radius = 40;
+  const radius = 32;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percent / 100) * circumference;
   loadingCircle.style.strokeDashoffset = offset.toString();
@@ -51,11 +65,11 @@ function updateStudyProgress() {
   ringLabel.textContent = `${percent}%`;
   
   if (viewedCards.size === totalGeneratedCards) {
-    errorMessage.textContent = 'All cards completed! 🎉';
+    errorMessage.textContent = 'Deck Mastered! 🎉';
     errorMessage.style.color = 'var(--accent-purple)';
     ringLabel.textContent = 'Done';
   } else {
-    errorMessage.textContent = `Study Progress: ${viewedCards.size} / ${totalGeneratedCards}`;
+    errorMessage.textContent = `${viewedCards.size} / ${totalGeneratedCards} Reviewed`;
     errorMessage.style.color = 'var(--text-dim)';
   }
 }
@@ -63,11 +77,11 @@ function updateStudyProgress() {
 function startLoadingSimulation() {
   let progress = 0;
   const stages = [
-    { threshold: 15, msg: "Initializing Gemini..." },
-    { threshold: 35, msg: "Verifying web sources..." },
-    { threshold: 60, msg: "Synthesizing definitions..." },
-    { threshold: 85, msg: "Validating link health..." },
-    { threshold: 99, msg: "Finalizing deck..." }
+    { threshold: 15, msg: "Initializing..." },
+    { threshold: 35, msg: "Searching web..." },
+    { threshold: 60, msg: "Synthesizing..." },
+    { threshold: 85, msg: "Validating..." },
+    { threshold: 99, msg: "Polishing..." }
   ];
 
   progressContainer.classList.add('is-loading');
@@ -112,17 +126,24 @@ modelButtons.forEach(btn => {
   });
 });
 
+// Toggle functionality for the overview section
+overviewToggle.addEventListener('click', () => {
+  overviewSection.classList.toggle('is-collapsed');
+});
+
 generateButton.addEventListener('click', async () => {
   const topic = topicInput.value.trim();
   const quantity = quantitySelector?.value || "10";
   
   if (!topic) {
-    errorMessage.textContent = 'Please enter a topic...';
-    errorMessage.style.color = 'var(--text-dim)';
+    errorMessage.textContent = 'Enter a topic...';
+    errorMessage.style.color = 'var(--accent-orange)';
     return;
   }
 
   flashcardsContainer.innerHTML = '';
+  overviewSection.classList.add('hidden');
+  overviewSection.classList.remove('is-collapsed'); // Reset collapse state for new content
   generateButton.disabled = true;
   viewedCards.clear();
   totalGeneratedCards = 0;
@@ -133,61 +154,96 @@ generateButton.addEventListener('click', async () => {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
-    const systemInstruction = `You are a high-fidelity academic AI specialized in verified knowledge retrieval. 
-      Generate exactly ${quantity} flashcards for: "${topic}".
+    const systemInstruction = `You are a world-class educational AI. 
+      Subject: "${topic}".
       Difficulty: ${selectedDifficulty.toUpperCase()}.
 
-      LINK VALIDATION PROTOCOL:
-      1. Use Google Search to find ACTUAL articles. 
-      2. ABSOLUTELY NO HALLUCINATED URLS. If you cannot find a direct, functioning link for a specific term, omit the source for that card rather than providing a broken one.
-      3. No generic root domains (e.g., just "google.com" or "wikipedia.org"). Links must be specific to the term.
-      4. Display Text: The 'title' field MUST be the specific name of the website (e.g., "National Geographic", "NASA", "Stanford Encyclopedia of Philosophy").
-      5. The links MUST NOT result in "Page Not Found". Favor long-standing educational institutions.
+      TASK:
+      1. Provide a comprehensive 'overview' of the subject. This should act as a "primer" for the student, covering the key context, significance, and core concepts. Use 2-4 rich paragraphs.
+      2. Provide 'overviewSources' (2-3 links) that offer further deep reading on the subject overview.
+      3. Generate exactly ${quantity} flashcards with verified 'term', 'definition', and specific verified 'sources'.
 
-      Format: JSON array of objects with "term", "definition", and "sources" (array of {url, title} objects).`;
+      LINK VALIDATION PROTOCOL:
+      - ONLY use live, active URLs. No hallucinated links.
+      - Display Text ('title'): Use the name of the website/journal (e.g. "Smithsonian", "MIT Technology Review").
+      - Ensure the URL leads to the actual topic content.
+
+      Format: JSON { "overview": string, "overviewSources": [{url, title}], "flashcards": [{term, definition, sources: [{url, title}]}] }`;
 
     const result = await ai.models.generateContent({
       model: selectedModel,
-      contents: `Generate ${quantity} flashcards for: "${topic}". Perform a deep search to ensure all source links are active and high-quality.`,
+      contents: `Generate a full learning session for: "${topic}".`,
       config: {
         systemInstruction,
         tools: [{ googleSearch: {} }],
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              term: { type: Type.STRING },
-              definition: { type: Type.STRING },
-              sources: { 
-                type: Type.ARRAY, 
-                items: {
-                  type: Type.OBJECT,
-                  properties: {
-                    url: { type: Type.STRING },
-                    title: { type: Type.STRING }
-                  },
-                  required: ["url", "title"]
-                }
+          type: Type.OBJECT,
+          properties: {
+            overview: { type: Type.STRING },
+            overviewSources: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  url: { type: Type.STRING },
+                  title: { type: Type.STRING }
+                },
+                required: ["url", "title"]
               }
             },
-            required: ["term", "definition", "sources"]
-          }
+            flashcards: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  term: { type: Type.STRING },
+                  definition: { type: Type.STRING },
+                  sources: { 
+                    type: Type.ARRAY, 
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        url: { type: Type.STRING },
+                        title: { type: Type.STRING }
+                      },
+                      required: ["url", "title"]
+                    }
+                  }
+                },
+                required: ["term", "definition", "sources"]
+              }
+            }
+          },
+          required: ["overview", "overviewSources", "flashcards"]
         }
       },
     });
 
     const responseText = result.text;
-    if (!responseText) throw new Error("Connection failed");
+    if (!responseText) throw new Error("Generation failed");
 
-    const flashcards: Flashcard[] = JSON.parse(responseText);
+    const data: GenerationResponse = JSON.parse(responseText);
 
     stopLoadingSimulation();
 
-    if (flashcards.length > 0) {
-      totalGeneratedCards = flashcards.length;
-      flashcards.forEach((flashcard, index) => {
+    // Render Overview
+    overviewTitle.textContent = topic;
+    overviewText.textContent = data.overview;
+    overviewSources.innerHTML = data.overviewSources.map(s => `
+      <a href="${s.url}" target="_blank" class="source-link">
+        <span class="material-symbols-rounded" style="font-size: 14px; margin-right: 4px;">link</span>
+        ${s.title}
+      </a>
+    `).join('');
+    overviewSection.classList.remove('hidden');
+
+    // Render Cards
+    if (data.flashcards.length > 0) {
+      totalGeneratedCards = data.flashcards.length;
+      cardCountLabel.textContent = totalGeneratedCards.toString();
+      
+      data.flashcards.forEach((flashcard, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('flashcard');
 
@@ -196,7 +252,7 @@ generateButton.addEventListener('click', async () => {
 
         const sourcesHtml = flashcard.sources && flashcard.sources.length > 0 
           ? `<div class="card-sources">
-              <span class="source-label">Sources:</span>
+              <span class="source-label">Verification:</span>
               ${flashcard.sources.map(s => `
                 <a href="${s.url}" target="_blank" class="source-link" onclick="event.stopPropagation()">
                   ${s.title}
