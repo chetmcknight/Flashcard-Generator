@@ -1,112 +1,130 @@
-<script type="importmap">
-  {
-    "imports": {
-      "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastery Deck AI</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
+      }
     }
-  }
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-
-<div class="app-container">
-  <main class="main-content">
-    <header class="dashboard-header">
-      <div class="header-left">
-        <h1>Study Deck <span>Generator</span></h1>
-        <p class="subtitle">AI-powered knowledge conversion</p>
-      </div>
-      <div class="header-actions">
-        <div class="selector-group">
-          <label class="selector-label">Model</label>
-          <div class="pill-selector" id="modelSelector">
-            <button type="button" class="pill-btn active" data-model="gemini-3-flash-preview">Flash</button>
-            <button type="button" class="pill-btn" data-model="gemini-3-pro-preview">Pro</button>
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-mode">
+  <div class="app-container">
+    <main class="main-content">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h1>Study Deck <span>AI</span></h1>
+          <p class="subtitle">Convert any subject into a mastery session</p>
+        </div>
+        <div class="header-actions">
+          <div class="selector-group">
+            <span class="selector-label">Intelligence</span>
+            <div class="pill-selector illuminated-group" id="modelSelector">
+              <button type="button" class="pill-btn active neon-flash" data-model="gemini-3-flash-preview">Flash</button>
+              <button type="button" class="pill-btn neon-pro" data-model="gemini-3-pro-preview">Pro</button>
+            </div>
+          </div>
+          <div class="selector-group">
+            <span class="selector-label">Depth</span>
+            <div class="pill-selector illuminated-group" id="difficultySelector">
+              <button type="button" class="pill-btn neon-easy" data-level="easy">Easy</button>
+              <button type="button" class="pill-btn active neon-medium" data-level="medium">Medium</button>
+              <button type="button" class="pill-btn neon-hard" data-level="hard">Hard</button>
+            </div>
+          </div>
+          <div class="selector-group">
+            <span class="selector-label">Quantity</span>
+            <select id="quantitySelector" class="custom-dropdown neon-qty">
+              <option value="10">10 Cards</option>
+              <option value="25">25 Cards</option>
+              <option value="50">50 Cards</option>
+            </select>
+          </div>
+          <div class="selector-group">
+            <span class="selector-label">Theme</span>
+            <button id="themeToggle" class="btn-icon theme-btn" title="Toggle Appearance">
+              <span class="material-symbols-rounded">dark_mode</span>
+            </button>
           </div>
         </div>
-        <div class="selector-group">
-          <label class="selector-label">Difficulty</label>
-          <div class="pill-selector" id="difficultySelector">
-            <button type="button" class="pill-btn" data-level="easy">Easy</button>
-            <button type="button" class="pill-btn active" data-level="medium">Medium</button>
-            <button type="button" class="pill-btn" data-level="hard">Hard</button>
+      </header>
+
+      <div class="input-dashboard">
+        <div class="input-card">
+          <div class="card-header">
+            <span class="card-label">Subject Entry</span>
+          </div>
+          <div class="search-input-wrapper">
+            <span class="material-symbols-rounded search-icon">psychology</span>
+            <input type="text" id="topicInput" placeholder="Enter a subject to master (e.g. Quantum Physics, Roman History)..." />
+          </div>
+          <div class="input-actions">
+            <button id="generateButton">
+              <span class="material-symbols-rounded">rocket_launch</span>
+              Generate Deck
+            </button>
           </div>
         </div>
-        <div class="selector-group">
-          <label class="selector-label">Quantity</label>
-          <select id="quantitySelector" class="custom-dropdown">
-            <option value="10">10 Cards</option>
-            <option value="25">25 Cards</option>
-            <option value="50">50 Cards</option>
-          </select>
-        </div>
-      </div>
-    </header>
-
-    <div class="input-dashboard">
-      <div class="input-card">
-        <div class="card-header">
-          <span class="label">Knowledge Input</span>
-          <div id="activeModelBadge" class="badge neon-blue">Gemini 3 Flash</div>
-        </div>
-        <div class="search-input-wrapper">
-          <span class="material-symbols-rounded search-icon">search</span>
-          <input
-            type="text"
-            id="topicInput"
-            placeholder="Enter a subject to master (e.g. Quantum Physics, Roman History)..."
-          />
-        </div>
-        <div class="card-footer">
-          <button id="generateButton">
-            <span class="material-symbols-rounded">magic_button</span>
-            Generate
+        
+        <div class="stats-card">
+          <span class="card-label">Session Progress</span>
+          <div id="errorMessage" class="status-text">Ready to learn.</div>
+          <div id="progressContainer" class="progress-ring-container">
+            <svg class="progress-ring" width="80" height="80">
+              <circle class="progress-ring-bg" stroke="var(--ring-bg)" stroke-width="5" fill="transparent" r="32" cx="40" cy="40"/>
+              <circle id="loadingCircle" class="progress-ring-fill" stroke="var(--accent-purple)" stroke-width="5" stroke-linecap="round" fill="transparent" r="32" cx="40" cy="40"/>
+            </svg>
+            <div id="ringLabel" class="ring-label">AI</div>
+          </div>
+          <button id="regenerateCardsButton" class="pill-btn neon-flash active hidden stats-action-btn" title="Generate fresh info cards for this subject">
+            <span class="material-symbols-rounded" style="font-size: 16px;">cached</span>
+            Regenerate
           </button>
         </div>
       </div>
-      
-      <div class="stats-card">
-        <div class="card-header">
-          <span class="label">Session Status</span>
-        </div>
-        <div id="errorMessage" class="status-text">Ready.</div>
-        <div id="progressContainer" class="progress-ring-container">
-          <svg class="progress-ring" width="80" height="80">
-            <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="5" fill="transparent" r="32" cx="40" cy="40"/>
-            <circle id="loadingCircle" class="progress-ring-fill" stroke="var(--accent-purple)" stroke-width="5" stroke-linecap="round" fill="transparent" r="32" cx="40" cy="40"/>
-          </svg>
-          <div id="ringLabel" class="ring-label">AI</div>
-        </div>
-      </div>
-    </div>
 
-    <section id="overviewSection" class="overview-section hidden">
-      <div class="overview-header-clickable" id="overviewToggle">
-        <div class="overview-title-group">
-          <span class="label">Knowledge Overview</span>
-          <h3 id="overviewTitle">Topic Summary</h3>
+      <section id="overviewSection" class="overview-section hidden">
+        <div class="overview-header-clickable" id="overviewToggle">
+          <div class="overview-title-group">
+            <span class="card-label">Subject Overview</span>
+            <h3 id="overviewTitle">Topic Summary</h3>
+          </div>
+          <span class="material-symbols-rounded toggle-arrow">expand_less</span>
         </div>
-        <span class="material-symbols-rounded toggle-arrow">expand_less</span>
-      </div>
-      <div class="overview-collapsible-content" id="overviewContent">
-        <p id="overviewText">Overview content goes here...</p>
-        <div id="overviewSources" class="overview-sources">
-          <!-- Sources list -->
+        <div class="overview-collapsible-content" id="overviewContent">
+          <div id="overviewText">Loading background...</div>
+          <div class="overview-actions">
+            <button id="moreInfoButton" class="pill-btn neon-pro active">
+              <span class="material-symbols-rounded" style="font-size: 16px;">add_circle</span>
+              More...
+            </button>
+          </div>
+          <div id="overviewSources" class="overview-sources"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="results-section">
-      <div class="results-header">
-        <h2>Flashcards</h2>
-        <div class="filters">
-          <span class="dot purple"></span> <span id="cardCountLabel">0</span> Cards Generated
+      <section class="results-section">
+        <div class="results-header">
+          <div class="results-title-group">
+            <h2>INFO CARDS</h2>
+            <div class="filters" style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
+              <span class="dot purple"></span> <span id="cardCountLabel">0</span> Items in Deck
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="flashcardsContainer" class="flashcards-grid">
-        <!-- Generated cards appear here -->
-      </div>
-    </section>
-  </main>
-</div>
+        <div id="flashcardsContainer" class="flashcards-grid"></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="index.tsx"></script>
+</body>
+</html>
