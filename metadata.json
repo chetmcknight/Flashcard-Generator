@@ -1,0 +1,5 @@
+{
+  "name": "Flashcard Maker",
+  "description": "Effortless flashcards on any subject. Just name a topic, and Gemini creates your study deck.",
+  "requestFramePermissions": []
+}
