@@ -230,7 +230,7 @@ function renderDeck(data: GenerationResponse, topic: string) {
       <div class="flashcard-inner">
         <div class="flashcard-front">
           <div class="card-top">
-            <span class="card-label" style="font-size: 7px;">CARD ${index + 1}</span>
+            <span class="card-label">CARD ${index + 1}</span>
             <span class="material-symbols-rounded status-check">check_circle</span>
           </div>
           <div class="term"><div>${card.term}</div></div>
@@ -238,7 +238,7 @@ function renderDeck(data: GenerationResponse, topic: string) {
         <div class="flashcard-back">
           <div class="card-top"><span class="def-label">Knowledge Definition</span></div>
           <div class="definition"><div>${card.definition}</div></div>
-          ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="font-size: 6px; width: 100%;">Grounding Sources</span>${sourcesHtml}</div>` : ''}
+          ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="width: 100%;">Grounding Sources</span>${sourcesHtml}</div>` : ''}
         </div>
       </div>
     `;
@@ -288,12 +288,14 @@ async function handleGenerate(isRegenerate = false) {
       Subject: "${topic}".
       Difficulty: ${selectedDifficulty.toUpperCase()}.
 
-      TASK:
-      1. Provide a comprehensive 'overview' summary of the subject grounded in research. 
-      2. Provide 'overviewSources' (2-3 links) for further reading.
-      3. Generate exactly ${quantity} info cards with verified 'term', 'definition', and specific verified 'sources'.
+      CRITICAL TASK: 
+      1. Provide a comprehensive 'overview' summary of the subject grounded EXCLUSIVELY in factual, verified research. 
+      2. Provide 'overviewSources' (2-3 links) to reliable academic or established news sources.
+      3. Generate exactly ${quantity} info cards with verified 'term', 'definition', and specific verified 'sources' for EACH.
+      
+      ACCURACY WARNING: 
+      Strictly avoid hallucinations. If you are unsure about a specific detail or source, omit it rather than providing incorrect information. All content must be educational and accurate.
 
-      CRITICAL CONSTRAINT:
       ${avoidListStr}
       Focus on fresh content, alternative perspectives, or deeper concepts related to the subject.
 
@@ -366,10 +368,10 @@ async function handleMoreInfo() {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: selectedModel,
-      contents: `Provide more advanced or niche historical/technical information about: ${currentTopic}. Focus on depth. Use markdown-like formatting for structure.`,
+      contents: `Provide more advanced or niche historical/technical information about: ${currentTopic}. Focus on depth and factual verification.`,
       config: {
         tools: [{ googleSearch: {} }],
-        systemInstruction: "You are extending a study overview. Provide only the new information, formatted for easy reading. Keep it under 150 words."
+        systemInstruction: "You are extending a study overview. Provide only the new, verified information. Keep it under 150 words."
       }
     });
 

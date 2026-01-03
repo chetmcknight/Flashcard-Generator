@@ -40,7 +40,6 @@ body {
   transition: background-color var(--transition), color var(--transition);
 }
 
-/* Ensure all form controls inherit the sans-serif font */
 button, select, input, textarea {
   font-family: inherit;
 }
@@ -95,7 +94,7 @@ h1 span {
   opacity: 0.8;
 }
 
-/* Controls - Stronger Self Illumination */
+/* Controls */
 .header-actions {
   display: flex;
   gap: 14px;
@@ -146,7 +145,6 @@ h1 span {
   overflow: hidden;
 }
 
-/* Intelligence Illuminated Styles - Enhanced Glow */
 .neon-flash.active {
   background: rgba(59, 130, 246, 0.2);
   color: var(--accent-blue);
@@ -161,27 +159,15 @@ h1 span {
   border: 1px solid rgba(168, 85, 247, 0.6);
 }
 
-/* Generic Pill Hover Animation for Active states (Regenerate, More...) */
 .pill-btn.active:hover {
   transform: translateY(-2px);
   z-index: 1;
-}
-
-.neon-flash.active:hover {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
-  background: rgba(59, 130, 246, 0.3);
-}
-
-.neon-pro.active:hover {
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 30px rgba(168, 85, 247, 0.2);
-  background: rgba(168, 85, 247, 0.3);
 }
 
 .pill-btn.active:active {
   transform: translateY(1px) scale(0.98);
 }
 
-/* Depth Illuminated Styles - Enhanced Glow */
 .neon-easy.active {
   background: rgba(34, 197, 94, 0.2);
   color: var(--accent-green);
@@ -221,16 +207,12 @@ h1 span {
   box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
-/* Theme Toggle Button */
+/* Theme Toggle Button Style Standardized */
 .theme-btn {
-  height: var(--box-height);
   width: var(--box-height);
+  height: var(--box-height);
   padding: 0;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  color: var(--accent-purple);
-  border-radius: 8px;
 }
 
 /* Dashboard Layout */
@@ -260,12 +242,17 @@ h1 span {
   justify-content: space-between;
 }
 
-.card-label {
+/* SYNCED LABEL SIZING - 9px */
+.card-label, .def-label {
   text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 9px;
+  font-weight: 800;
   color: var(--text-dim);
   letter-spacing: 1.2px;
+}
+
+.def-label {
+  color: var(--accent-blue);
 }
 
 /* Search Input Box */
@@ -339,25 +326,16 @@ h1 span {
 #generateButton::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
   opacity: 0.15;
   transition: opacity 0.3s;
 }
 
-/* Light Mode Aesthetic Matching for Generate Button */
 body.light-mode #generateButton {
-  background: rgba(168, 85, 247, 0.12); /* Matches pill-button translucency */
-  color: var(--accent-purple); /* Legible accent color text */
+  background: rgba(168, 85, 247, 0.12);
+  color: var(--accent-purple);
   border: 1px solid rgba(168, 85, 247, 0.5);
-  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15);
-}
-
-body.light-mode #generateButton::before {
-  opacity: 0.05; /* Soften the gradient overlay in light mode */
 }
 
 #generateButton:hover:not(:disabled) {
@@ -368,70 +346,9 @@ body.light-mode #generateButton::before {
   color: #ffffff;
 }
 
-body.light-mode #generateButton:hover:not(:disabled) {
-  background: rgba(168, 85, 247, 0.2); /* Slightly more prominent on hover */
-  color: var(--accent-purple);
-  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
-}
-
-#generateButton:hover:not(:disabled)::before {
-  opacity: 0.35;
-}
-
-body.light-mode #generateButton:hover:not(:disabled)::before {
-  opacity: 0.1;
-}
-
 #generateButton:active:not(:disabled) {
   transform: translateY(1px) scale(0.98);
 }
-
-.btn-secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.3s;
-}
-
-.btn-secondary:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-main);
-  border-color: var(--text-dim);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-}
-
-/* Regenerate in stats placement */
-.stats-action-btn {
-  margin-top: auto;
-  width: 100%;
-  justify-content: center;
-  height: 36px;
-}
-
-/* Depth overlay for Regenerate and More buttons */
-.stats-action-btn::before, #moreInfoButton::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  opacity: 0.1;
-  transition: opacity 0.3s;
-}
-.stats-action-btn::before { background: var(--accent-blue); }
-#moreInfoButton::before { background: var(--accent-purple); }
-
-.stats-action-btn:hover::before, #moreInfoButton:hover::before {
-  opacity: 0.25;
-}
-
-#generateButton:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Session Stats */
 .stats-card { 
@@ -443,6 +360,13 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
 .progress-ring-container { position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
 .progress-ring-fill { transition: stroke-dashoffset 0.8s; transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: 201.06; stroke-dashoffset: 201.06; }
 .ring-label { position: absolute; font-size: 14px; font-weight: 700; color: var(--accent-purple); }
+
+.stats-action-btn {
+  margin-top: auto;
+  width: 100%;
+  justify-content: center;
+  height: 36px;
+}
 
 /* Overview Section */
 .overview-section {
@@ -465,7 +389,37 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
 }
 
 .overview-header-clickable:hover { background: rgba(128, 128, 128, 0.05); }
-.toggle-arrow { transition: transform 0.3s ease; color: var(--text-dim); }
+
+/* PROMINENT TOGGLE CARROT STYLED AS PILL BUTTON */
+.toggle-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-arrow { 
+  /* Inherit pill-btn styling */
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--accent-purple);
+  border: 1px solid rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  
+  width: var(--box-height);
+  height: var(--box-height);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 24px !important;
+}
+
+.toggle-arrow:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.3);
+}
+
 .is-collapsed .toggle-arrow { transform: rotate(180deg); }
 
 .overview-collapsible-content {
@@ -488,11 +442,29 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
   text-transform: capitalize;
 }
 
+.overview-disclaimer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+  letter-spacing: 0.2px;
+}
+
+.overview-disclaimer span {
+  font-size: 14px;
+}
+
 #overviewText { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 16px; white-space: pre-wrap; }
 
+/* RIGHT ALIGN MORE BUTTON */
 .overview-actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end; 
   margin-bottom: 24px;
   height: var(--box-height);
 }
@@ -502,32 +474,12 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
   justify-content: center;
 }
 
-#moreInfoButton:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
 .overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
 
 /* Results Header */
 .results-section { border-top: 1px solid var(--border); padding-top: 32px; }
 .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .results-header h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); margin: 0; }
-
-.btn-icon {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.2s;
-}
-.btn-icon:hover { background: var(--bg-card-hover); color: var(--text-main); border-color: var(--text-dim); }
 
 /* Flashcards Grid */
 .flashcards-grid {
@@ -538,12 +490,12 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
 
 .flashcard {
   height: 260px;
-  perspective: 1000px;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  perspective: 1500px;
 }
 
 .flashcard:hover {
   transform: translateY(-8px) scale(1.02);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .flashcard-inner {
@@ -559,37 +511,104 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
   transform: rotateY(180deg);
 }
 
+/* 
+   CRITICAL: STACKED FACE POSITIONING 
+   We use solid background and translateZ to prevent text bleed-through.
+*/
 .flashcard-front, .flashcard-back {
-  position: absolute;
+  position: absolute !important; 
+  top: 0; 
+  left: 0;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   padding: 24px;
   border-radius: 20px;
-  background: var(--bg-card);
+  background-color: var(--bg-card); /* Solid background is vital */
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2), 0 0 10px rgba(168, 85, 247, 0.05);
+  transition: border-color 0.4s, box-shadow 0.4s;
+  overflow: hidden;
+  
+  /* Hides the back of the card element when flipped */
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+.flashcard-front {
+  z-index: 2;
+  transform: rotateY(0deg) translateZ(1px); /* Ensure it is in front of its own 'back' */
+}
+
+.flashcard-back {
+  transform: rotateY(180deg) translateZ(1px); /* Rotated but also pulled 'out' of its plane */
+}
+
+/* Ensure children also respect backface visibility */
+.flashcard-front > *, .flashcard-back > * {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+/* Overlay illumination stays inside the card */
+.flashcard-front::before, .flashcard-back::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  opacity: 0.04;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.flashcard:hover .flashcard-front::before, 
+.flashcard:hover .flashcard-back::before {
+  opacity: 0.08;
 }
 
 .flashcard:hover .flashcard-front,
 .flashcard:hover .flashcard-back {
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 20px rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+/* Mastery Glow (Viewed State) */
+.is-viewed .flashcard-front {
+  border-color: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2), 0 0 15px rgba(34, 197, 94, 0.15);
+}
+
+.is-viewed .flashcard-front::before {
+  background: var(--accent-green);
+  opacity: 0.06;
+}
+
+.is-viewed:hover .flashcard-front {
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 30px rgba(34, 197, 94, 0.3);
+  border-color: rgba(34, 197, 94, 0.7);
 }
 
 .flashcard-back {
   transform: rotateY(180deg);
 }
 
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-top { 
+  position: relative; 
+  z-index: 2; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start;
+}
 
 .status-check { font-size: 20px; color: var(--accent-green); opacity: 0; transition: 0.3s; }
 .is-viewed .status-check { opacity: 1; }
 
 .term, .definition {
+  position: relative;
+  z-index: 2;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -598,14 +617,30 @@ body.light-mode #generateButton:hover:not(:disabled)::before {
 }
 
 .term { font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--text-main); }
-.def-label { font-size: 9px; color: var(--accent-blue); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
 .definition { font-size: 13px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
-.card-sources { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.card-sources { position: relative; z-index: 2; border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .source-link { font-size: 9px; color: var(--accent-blue); text-decoration: none; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; }
 .source-link:hover { background: rgba(59, 130, 246, 0.2); }
 
+/* App Footer & Disclaimer */
+.app-footer {
+  margin-top: 60px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+
+.disclaimer {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.6;
+}
+
 .hidden { display: none; }
-.is-viewed .flashcard-front { border-color: rgba(34, 197, 94, 0.3); }
 
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 .is-loading .ring-label { animation: pulse 1.5s infinite; }

@@ -51,7 +51,7 @@
           </div>
           <div class="selector-group">
             <span class="selector-label">Theme</span>
-            <button id="themeToggle" class="btn-icon theme-btn" title="Toggle Appearance">
+            <button id="themeToggle" class="pill-btn neon-pro active theme-btn" title="Toggle Appearance">
               <span class="material-symbols-rounded">dark_mode</span>
             </button>
           </div>
@@ -98,7 +98,9 @@
             <span class="card-label">Subject Overview</span>
             <h3 id="overviewTitle">Topic Summary</h3>
           </div>
-          <span class="material-symbols-rounded toggle-arrow">expand_less</span>
+          <div class="toggle-btn-wrapper">
+            <span class="material-symbols-rounded toggle-arrow">expand_less</span>
+          </div>
         </div>
         <div class="overview-collapsible-content" id="overviewContent">
           <div id="overviewText">Loading background...</div>
@@ -109,6 +111,10 @@
             </button>
           </div>
           <div id="overviewSources" class="overview-sources"></div>
+          <div class="overview-disclaimer">
+            <span class="material-symbols-rounded">info</span>
+            AI-generated summary. Verify critical facts with original sources.
+          </div>
         </div>
       </section>
 
@@ -123,6 +129,13 @@
         </div>
         <div id="flashcardsContainer" class="flashcards-grid"></div>
       </section>
+
+      <footer class="app-footer">
+        <div class="disclaimer">
+          <span class="material-symbols-rounded" style="font-size: 14px;">info</span>
+          AI-generated content can contain factual errors. Always verify critical information with primary sources.
+        </div>
+      </footer>
     </main>
   </div>
   <script type="module" src="index.tsx"></script>
