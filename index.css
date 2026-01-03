@@ -143,6 +143,7 @@ h1 span {
   gap: 8px;
   position: relative;
   overflow: hidden;
+  transform-origin: center center;
 }
 
 .neon-flash.active {
@@ -160,12 +161,12 @@ h1 span {
 }
 
 .pill-btn.active:hover {
-  transform: translateY(-2px);
+  transform: scale(1.05);
   z-index: 1;
 }
 
 .pill-btn.active:active {
-  transform: translateY(1px) scale(0.98);
+  transform: scale(0.95);
 }
 
 .neon-easy.active {
@@ -321,6 +322,7 @@ h1 span {
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.3), 0 0 20px rgba(59, 130, 246, 0.1);
   position: relative;
   overflow: hidden;
+  transform-origin: center center;
 }
 
 #generateButton::before {
@@ -339,7 +341,7 @@ body.light-mode #generateButton {
 }
 
 #generateButton:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: scale(1.03);
   background: rgba(168, 85, 247, 0.2);
   border-color: var(--accent-purple);
   box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), 0 0 30px rgba(59, 130, 246, 0.2);
@@ -347,7 +349,7 @@ body.light-mode #generateButton {
 }
 
 #generateButton:active:not(:disabled) {
-  transform: translateY(1px) scale(0.98);
+  transform: scale(0.96);
 }
 
 /* Session Stats */
@@ -390,37 +392,43 @@ body.light-mode #generateButton {
 
 .overview-header-clickable:hover { background: rgba(128, 128, 128, 0.05); }
 
-/* PROMINENT TOGGLE CARROT STYLED AS PILL BUTTON */
+/* TOGGLE CARROT - REMOVED CIRCLE, DIRECT SELF-ILLUMINATION */
 .toggle-btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 60px;
+  height: 60px;
 }
 
 .toggle-arrow { 
-  /* Inherit pill-btn styling */
-  background: rgba(168, 85, 247, 0.2);
+  background: transparent;
+  border: none;
   color: var(--accent-purple);
-  border: 1px solid rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-  
-  width: var(--box-height);
-  height: var(--box-height);
-  border-radius: 8px;
+  /* Self-illumination via text-shadow */
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.6), 0 0 16px rgba(168, 85, 247, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 24px !important;
+  font-size: 48px !important; /* Prominent carrot */
+  line-height: 0;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  transform-origin: center center;
+  cursor: pointer;
 }
 
 .toggle-arrow:hover {
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
-  background: rgba(168, 85, 247, 0.3);
+  transform: scale(1.15);
+  color: var(--accent-blue);
+  text-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 24px rgba(59, 130, 246, 0.4);
 }
 
-.is-collapsed .toggle-arrow { transform: rotate(180deg); }
+.is-collapsed .toggle-arrow { 
+  transform: rotate(180deg); 
+}
 
 .overview-collapsible-content {
   padding: 0 24px 24px;
@@ -491,11 +499,13 @@ body.light-mode #generateButton {
 .flashcard {
   height: 260px;
   perspective: 1500px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center center;
 }
 
 .flashcard:hover {
-  transform: translateY(-8px) scale(1.02);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(1.05);
+  z-index: 5;
 }
 
 .flashcard-inner {
