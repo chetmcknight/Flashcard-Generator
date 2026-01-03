@@ -7,6 +7,7 @@
   --accent-blue: #3b82f6;
   --accent-purple: #a855f7;
   --accent-orange: #f97316;
+  --accent-green: #22c55e;
   --border: rgba(255, 255, 255, 0.08);
   --font-family: 'Inter', -apple-system, sans-serif;
 }
@@ -29,7 +30,6 @@ body {
   min-height: 100vh;
 }
 
-/* Main Content Area */
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -84,7 +84,6 @@ h1 span {
   margin-left: 4px;
 }
 
-/* Custom Dropdown */
 .custom-dropdown {
   background: #111;
   border: 1px solid var(--border);
@@ -103,16 +102,6 @@ h1 span {
   transition: all 0.2s;
 }
 
-.custom-dropdown:hover {
-  border-color: rgba(255,255,255,0.15);
-}
-
-.custom-dropdown option {
-  background: #111;
-  color: var(--text-main);
-}
-
-/* Selector Redesign */
 .pill-selector {
   background: #111;
   border: 1px solid var(--border);
@@ -137,10 +126,8 @@ h1 span {
 .pill-btn.active {
   background: var(--bg-card-hover);
   color: var(--text-main);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
-/* Input Cards Area */
 .input-dashboard {
   display: grid;
   grid-template-columns: 1fr 280px;
@@ -200,11 +187,6 @@ textarea {
   line-height: 1.6;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
 #generateButton {
   background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
   color: #fff;
@@ -219,54 +201,20 @@ textarea {
   justify-content: center;
   gap: 10px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
-  position: relative;
-  overflow: hidden;
 }
 
 #generateButton:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
   filter: brightness(1.1);
-}
-
-#generateButton:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Shimmer effect for extra allure */
-#generateButton::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -100%;
-  width: 100%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  transition: 0.6s;
-  pointer-events: none;
-}
-
-#generateButton:hover::after {
-  left: 100%;
 }
 
 #generateButton:disabled {
   background: #333;
   color: #666;
-  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
-/* Stats/Progress Area */
 .stats-card {
   align-items: center;
   justify-content: center;
@@ -278,6 +226,7 @@ textarea {
   color: var(--text-dim);
   margin-bottom: 24px;
   min-height: 1.5em;
+  line-height: 1.4;
 }
 
 .progress-ring-container {
@@ -287,11 +236,20 @@ textarea {
   justify-content: center;
 }
 
+.progress-ring-container.is-loading .progress-ring {
+  animation: spin-ring 2s linear infinite;
+}
+
+@keyframes spin-ring {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .progress-ring-fill {
-  transition: stroke-dashoffset 0.35s;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
-  stroke-dasharray: 251.327; /* 2 * PI * 40 */
+  stroke-dasharray: 251.327;
   stroke-dashoffset: 251.327;
 }
 
@@ -302,7 +260,6 @@ textarea {
   color: var(--accent-purple);
 }
 
-/* Flashcards Results Area */
 .results-section {
   border-top: 1px solid var(--border);
   padding-top: 40px;
@@ -321,29 +278,14 @@ textarea {
   font-weight: 500;
 }
 
-.filters {
-  font-size: 12px;
-  color: var(--text-dim);
-}
-
-.dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-right: 4px;
-}
-.dot.purple { background: var(--accent-purple); }
-
 .flashcards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
-/* Flashcard Cards */
 .flashcard {
-  height: 200px;
+  height: 280px;
   perspective: 1000px;
 }
 
@@ -353,6 +295,7 @@ textarea {
   height: 100%;
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-style: preserve-3d;
+  cursor: pointer;
 }
 
 .flashcard.flipped .flashcard-inner {
@@ -364,7 +307,7 @@ textarea {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  padding: 28px;
+  padding: 24px;
   border-radius: 20px;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -383,30 +326,28 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 24px;
 }
 
-.card-date {
-  font-size: 10px;
-  color: var(--text-dim);
-  text-transform: uppercase;
+.status-check {
+  font-size: 20px;
+  color: var(--accent-green);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.card-icon {
-  width: 28px;
-  height: 28px;
-  background: #000;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
+.is-viewed .status-check {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .term {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-top: auto;
-  letter-spacing: -0.3px;
+  line-height: 1.3;
+  color: var(--text-main);
 }
 
 .def-label {
@@ -419,8 +360,48 @@ textarea {
 }
 
 .definition {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--text-dim);
-  margin-top: auto;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.card-sources {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.source-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin-right: 4px;
+  display: block;
+  width: 100%;
+}
+
+.source-link {
+  font-size: 11px;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.source-link:hover {
+  background: rgba(59, 130, 246, 0.2);
+  transform: translateY(-1px);
+}
+
+.is-viewed .flashcard-front {
+  border-color: rgba(34, 197, 94, 0.3);
 }
