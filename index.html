@@ -22,7 +22,7 @@
     <main class="main-content">
       <header class="dashboard-header">
         <div class="header-left">
-          <h1>Study Deck <span>AI</span></h1>
+          <h1>Mastery Deck <span>AI</span></h1>
           <p class="subtitle">Convert any subject into a mastery session</p>
         </div>
         <div class="header-actions">
@@ -118,16 +118,21 @@
         </div>
       </section>
 
-      <section class="results-section">
-        <div class="results-header">
+      <section id="resultsSection" class="results-section">
+        <div class="results-header results-header-clickable" id="resultsToggle">
           <div class="results-title-group">
             <h2>INFO CARDS</h2>
             <div class="filters" style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
               <span class="dot purple"></span> <span id="cardCountLabel">0</span> Items in Deck
             </div>
           </div>
+          <div class="toggle-btn-wrapper">
+            <span class="material-symbols-rounded toggle-arrow">expand_less</span>
+          </div>
         </div>
-        <div id="flashcardsContainer" class="flashcards-grid"></div>
+        <div class="results-collapsible-content">
+          <div id="flashcardsContainer" class="flashcards-grid"></div>
+        </div>
       </section>
 
       <footer class="app-footer">

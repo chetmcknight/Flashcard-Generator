@@ -43,6 +43,9 @@ const overviewTitle = document.getElementById('overviewTitle') as HTMLHeadingEle
 const overviewText = document.getElementById('overviewText') as HTMLDivElement;
 const overviewSources = document.getElementById('overviewSources') as HTMLDivElement;
 
+const resultsSection = document.getElementById('resultsSection') as HTMLElement;
+const resultsToggle = document.getElementById('resultsToggle') as HTMLElement;
+
 // App State
 let selectedDifficulty = 'medium';
 let selectedModel = 'gemini-3-flash-preview';
@@ -422,6 +425,7 @@ modelButtons.forEach(btn => {
 });
 
 overviewToggle.addEventListener('click', () => overviewSection.classList.toggle('is-collapsed'));
+resultsToggle.addEventListener('click', () => resultsSection.classList.toggle('is-collapsed'));
 
 generateButton.addEventListener('click', () => handleGenerate(false));
 regenerateCardsButton.addEventListener('click', () => handleGenerate(true));

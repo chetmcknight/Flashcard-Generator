@@ -11,6 +11,8 @@
   --accent-green: #22c55e;
   --accent-red: #ef4444;
   --border: rgba(255, 255, 255, 0.08);
+  --control-border: rgba(168, 85, 247, 0.5);
+  --control-glow: rgba(168, 85, 247, 0.15);
   --ring-bg: rgba(255, 255, 255, 0.05);
   --font-family: 'Inter', -apple-system, sans-serif;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -24,6 +26,8 @@ body.light-mode {
   --text-main: #0f172a;
   --text-dim: #64748b;
   --border: rgba(0, 0, 0, 0.08);
+  --control-border: rgba(168, 85, 247, 0.4);
+  --control-glow: rgba(168, 85, 247, 0.1);
   --ring-bg: rgba(0, 0, 0, 0.05);
 }
 
@@ -94,7 +98,7 @@ h1 span {
   opacity: 0.8;
 }
 
-/* Controls */
+/* Controls - PERSISTENT PURPLE STROKE */
 .header-actions {
   display: flex;
   gap: 14px;
@@ -117,12 +121,13 @@ h1 span {
 
 .custom-dropdown, .pill-selector {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border); /* Persistent purple stroke */
   border-radius: 8px;
   transition: var(--transition);
   height: var(--box-height);
   display: flex;
   align-items: center;
+  box-shadow: 0 0 12px var(--control-glow); /* Subtle persistent glow */
 }
 
 .pill-selector { padding: 4px; }
@@ -196,7 +201,7 @@ h1 span {
   outline: none;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23a855f7' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: calc(100% - 12px) center;
   padding-right: 32px;
@@ -214,6 +219,7 @@ h1 span {
   height: var(--box-height);
   padding: 0;
   justify-content: center;
+  border-radius: 8px !important; /* Match the squareish containers */
 }
 
 /* Dashboard Layout */
@@ -370,8 +376,8 @@ body.light-mode #generateButton {
   height: 36px;
 }
 
-/* Overview Section */
-.overview-section {
+/* Overview & Results Common Section Styles */
+.overview-section, .results-section {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -382,15 +388,23 @@ body.light-mode #generateButton {
   transition: var(--transition);
 }
 
-.overview-header-clickable {
+.results-section {
+  border-top: 1px solid var(--border);
+  padding: 0; /* Resetting previously added padding-top */
+}
+
+.overview-header-clickable, .results-header-clickable {
   padding: 24px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background 0.2s;
 }
 
-.overview-header-clickable:hover { background: rgba(128, 128, 128, 0.05); }
+.overview-header-clickable:hover, .results-header-clickable:hover { 
+  background: rgba(128, 128, 128, 0.05); 
+}
 
 /* TOGGLE CARROT - REMOVED CIRCLE, DIRECT SELF-ILLUMINATION */
 .toggle-btn-wrapper {
@@ -430,14 +444,16 @@ body.light-mode #generateButton {
   transform: rotate(180deg); 
 }
 
-.overview-collapsible-content {
+/* Collapsible Content Areas */
+.overview-collapsible-content, .results-collapsible-content {
   padding: 0 24px 24px;
-  max-height: 2000px;
+  max-height: 10000px; /* High enough for large decks */
   overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.3s;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
 }
 
-.is-collapsed .overview-collapsible-content {
+.is-collapsed .overview-collapsible-content,
+.is-collapsed .results-collapsible-content {
   max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0;
 }
 
@@ -484,9 +500,13 @@ body.light-mode #generateButton {
 
 .overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-/* Results Header */
-.results-section { border-top: 1px solid var(--border); padding-top: 32px; }
-.results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+/* Results Header Styling Adjustments */
+.results-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 0; /* Removing margin because it's in a collapsible container now */
+}
 .results-header h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); margin: 0; }
 
 /* Flashcards Grid */
@@ -494,6 +514,7 @@ body.light-mode #generateButton {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  padding-top: 24px; /* Added spacing since header margin was removed */
 }
 
 .flashcard {
