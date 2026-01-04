@@ -553,3 +553,132 @@ body.light-mode .theme-btn .material-symbols-rounded {
 
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 .is-loading .ring-label { animation: pulse 1.5s infinite; }
+
+/* --- Mobile Responsive Styles --- */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 16px 12px;
+  }
+
+  .selector-group {
+    flex: 1 1 calc(50% - 12px);
+    min-width: 140px;
+  }
+
+  .selector-group.theme-group {
+    flex: 0 0 auto;
+    min-width: auto;
+  }
+
+  .pill-selector, .custom-dropdown {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .pill-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0 8px;
+  }
+  
+  .search-input-wrapper {
+    padding: 0 12px;
+  }
+  
+  #topicInput {
+    font-size: 15px;
+  }
+  
+  .input-actions {
+    width: 100%;
+  }
+  
+  #generateButton {
+    width: 100%;
+  }
+
+  .stats-card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .progress-ring-container {
+    order: 1;
+    margin: 0;
+  }
+  
+  .stats-card .card-label {
+    order: 0;
+    width: auto;
+    margin-bottom: 0;
+  }
+  
+  .status-text {
+    order: 2;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+  }
+  
+  .stats-action-btn {
+    order: 3;
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .selector-group {
+    flex: 1 1 100%;
+  }
+  
+  .selector-group.theme-group {
+    flex: 1 1 100%;
+  }
+  
+  .theme-btn {
+    width: 100%;
+  }
+
+  .stats-card {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .stats-card .card-label {
+    width: 100%;
+  }
+  
+  .progress-ring-container {
+    order: 2;
+  }
+  
+  .status-text {
+    order: 3;
+  }
+}
