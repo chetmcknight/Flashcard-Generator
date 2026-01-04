@@ -487,7 +487,6 @@ body.light-mode .theme-btn .material-symbols-rounded {
 #overviewText { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 16px; white-space: pre-wrap; }
 .overview-actions { display: flex; justify-content: flex-end; margin-bottom: 24px; }
 .overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
-.overview-disclaimer { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; opacity: 0.5; }
 
 /* Flashcards Grid */
 .flashcards-grid {
