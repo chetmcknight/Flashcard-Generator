@@ -51,7 +51,7 @@
           </div>
           <div class="selector-group">
             <span class="selector-label">Theme</span>
-            <button id="themeToggle" class="pill-btn neon-pro active theme-btn" title="Toggle Appearance">
+            <button id="themeToggle" class="theme-btn" title="Toggle Appearance">
               <span class="material-symbols-rounded">dark_mode</span>
             </button>
           </div>
@@ -76,8 +76,7 @@
         </div>
         
         <div class="stats-card">
-          <span class="card-label">Session Progress</span>
-          <div id="errorMessage" class="status-text">Ready to learn.</div>
+          <span class="card-label session-label">Session Progress</span>
           <div id="progressContainer" class="progress-ring-container">
             <svg class="progress-ring" width="80" height="80">
               <circle class="progress-ring-bg" stroke="var(--ring-bg)" stroke-width="5" fill="transparent" r="32" cx="40" cy="40"/>
@@ -85,6 +84,7 @@
             </svg>
             <div id="ringLabel" class="ring-label">AI</div>
           </div>
+          <div id="errorMessage" class="status-text">Ready to learn</div>
           <button id="regenerateCardsButton" class="pill-btn neon-flash active hidden stats-action-btn" title="Generate fresh info cards for this subject">
             <span class="material-symbols-rounded" style="font-size: 16px;">cached</span>
             Regenerate
@@ -92,18 +92,20 @@
         </div>
       </div>
 
-      <section id="overviewSection" class="overview-section hidden">
+      <section id="overviewSection" class="overview-section is-collapsed">
         <div class="overview-header-clickable" id="overviewToggle">
-          <div class="overview-title-group">
-            <span class="card-label">Subject Overview</span>
-            <h3 id="overviewTitle">Topic Summary</h3>
+          <div class="results-title-group" style="padding: 24px;">
+            <h2>SUBJECT OVERVIEW</h2>
+            <div class="filters">
+              <span class="dot blue"></span> <span id="overviewTitle">Topic Summary</span>
+            </div>
           </div>
           <div class="toggle-btn-wrapper">
             <span class="material-symbols-rounded toggle-arrow">expand_less</span>
           </div>
         </div>
         <div class="overview-collapsible-content" id="overviewContent">
-          <div id="overviewText">Loading background...</div>
+          <div id="overviewText">Ready for a subject entry...</div>
           <div class="overview-actions">
             <button id="moreInfoButton" class="pill-btn neon-pro active">
               <span class="material-symbols-rounded" style="font-size: 16px;">add_circle</span>
@@ -118,12 +120,12 @@
         </div>
       </section>
 
-      <section id="resultsSection" class="results-section">
-        <div class="results-header results-header-clickable" id="resultsToggle">
-          <div class="results-title-group">
-            <h2>INFO CARDS</h2>
-            <div class="filters" style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-              <span class="dot purple"></span> <span id="cardCountLabel">0</span> Items in Deck
+      <section id="resultsSection" class="results-section is-collapsed">
+        <div class="results-header-clickable" id="resultsToggle">
+          <div class="results-title-group" style="padding: 24px;">
+            <h2>SUBJECT CARDS</h2>
+            <div class="filters">
+              <span class="dot purple"></span> <span id="cardCountLabel">0</span>&nbsp;Items in Deck
             </div>
           </div>
           <div class="toggle-btn-wrapper">

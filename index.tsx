@@ -39,7 +39,7 @@ const regenerateCardsButton = document.getElementById('regenerateCardsButton') a
 
 const overviewSection = document.getElementById('overviewSection') as HTMLElement;
 const overviewToggle = document.getElementById('overviewToggle') as HTMLElement;
-const overviewTitle = document.getElementById('overviewTitle') as HTMLHeadingElement;
+const overviewTitle = document.getElementById('overviewTitle') as HTMLElement;
 const overviewText = document.getElementById('overviewText') as HTMLDivElement;
 const overviewSources = document.getElementById('overviewSources') as HTMLDivElement;
 
@@ -78,14 +78,14 @@ function performDeepClear() {
   
   // 3. UI Cleanup
   flashcardsContainer.innerHTML = '';
-  overviewText.innerHTML = '';
+  overviewText.innerHTML = 'Ready for a subject entry...';
   overviewTitle.textContent = 'Topic Summary';
   overviewSources.innerHTML = '';
   cardCountLabel.textContent = '0';
   topicInput.value = '';
   
   // 4. Status/Feedback Reset
-  errorMessage.textContent = 'Ready to learn.';
+  errorMessage.textContent = 'Ready to learn';
   errorMessage.style.color = 'var(--text-dim)';
   ringLabel.textContent = 'AI';
   
@@ -97,7 +97,6 @@ function performDeepClear() {
   }
   
   // 5. Visibility Reset
-  overviewSection.classList.add('hidden');
   progressContainer.classList.remove('is-loading');
   regenerateCardsButton.classList.add('hidden');
   
@@ -215,7 +214,6 @@ function renderDeck(data: GenerationResponse, topic: string) {
       ${s.title}
     </a>
   `).join('');
-  overviewSection.classList.remove('hidden');
   
   // Render Cards
   cardCountLabel.textContent = data.flashcards.length.toString();
