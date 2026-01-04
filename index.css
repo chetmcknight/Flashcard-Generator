@@ -144,14 +144,20 @@ h1 span {
   overflow: visible !important; /* Force visible overflow to show glows */
   width: auto;
   min-width: max-content; /* Ensure container is wide enough for buttons */
+  cursor: pointer;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
 }
 
-/* Hover state for Upper Windows - Brighter Blue */
+/* Hover state for Blue Controls */
 .custom-dropdown:hover, 
 .pill-selector:hover, 
 .theme-btn:hover {
   border-color: var(--accent-blue);
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
 }
 
 .pill-selector { 
@@ -179,6 +185,13 @@ h1 span {
   white-space: nowrap; /* Prevent text wrapping */
   flex-shrink: 0; /* Prevent buttons from being squashed */
   margin: 0;
+}
+
+/* Standalone pill buttons outside fixed-height containers */
+.stats-action-btn, #moreInfoButton, #tenMoreButton {
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 10px;
 }
 
 /* Ensure active button layers over siblings to show full border/glow */
@@ -230,18 +243,13 @@ h1 span {
 
 /* Cards Dropdown styling */
 .custom-dropdown {
-  color: var(--text-dim); /* Matches standard button text (like "Hard" inactive) */
-  padding: 0 12px;
-  font-size: 12px;
-  font-weight: 600; /* Matching button font weight */
   outline: none;
-  cursor: pointer;
   appearance: none;
   /* Blue arrow to match the Blue Border */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%233b82f6' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: calc(100% - 12px) center;
-  padding-right: 32px;
+  padding: 0 32px 0 12px;
   min-width: 110px;
 }
 
@@ -252,7 +260,7 @@ h1 span {
 }
 
 .theme-btn .material-symbols-rounded {
-  color: var(--text-dim); /* Non-purple, neutral */
+  color: var(--text-dim);
 }
 
 body.light-mode .theme-btn .material-symbols-rounded {
@@ -285,8 +293,24 @@ body.light-mode .theme-btn .material-symbols-rounded {
   overflow: hidden;
 }
 
-/* Hover state for Big Windows - Purple */
-.input-card:hover, 
+/* Specialized Prominence for Input Card */
+.input-card { 
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+  justify-content: space-between; 
+  border-color: rgba(168, 85, 247, 0.3); /* Persistent subtle purple */
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.05);
+}
+
+.input-card:hover, .input-card:focus-within {
+  border-color: var(--accent-purple);
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Hover state for Big Windows */
 .stats-card:hover, 
 .overview-section:hover, 
 .results-section:hover {
@@ -294,19 +318,11 @@ body.light-mode .theme-btn .material-symbols-rounded {
   box-shadow: 0 0 15px var(--control-glow);
 }
 
-.input-card { 
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  min-height: 140px;
-  justify-content: space-between; 
-}
-
 .stats-card {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  min-height: 140px;
+  min-height: 160px;
   align-items: center; 
   text-align: center; 
   justify-content: flex-start;
@@ -321,7 +337,7 @@ body.light-mode .theme-btn .material-symbols-rounded {
 .card-label, .def-label, .results-title-group h2 {
   text-transform: uppercase;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600; /* Reduced from 800 */
   color: var(--text-dim);
   letter-spacing: 1.5px;
   margin: 0;
@@ -329,6 +345,12 @@ body.light-mode .theme-btn .material-symbols-rounded {
 
 .session-label {
   font-size: 11px;
+}
+
+/* Specifically smaller for card numbering */
+.flashcard .card-label {
+  font-size: 10px;
+  letter-spacing: 1.2px;
 }
 
 .def-label { color: var(--accent-blue); }
@@ -340,26 +362,39 @@ body.light-mode .theme-btn .material-symbols-rounded {
   border-radius: 12px;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 4px 20px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: none;
-  margin: 12px 0;
+  margin: 16px 0;
 }
 
-.search-input-wrapper:focus-within {
-  background: rgba(128, 128, 128, 0.08);
+.input-card:focus-within .search-input-wrapper {
+  background: rgba(168, 85, 247, 0.08);
 }
 
-.search-icon { color: var(--accent-purple); font-size: 28px; margin-right: 12px; display: flex; align-items: center; }
+.search-icon { 
+  color: var(--accent-purple); 
+  font-size: 32px; 
+  margin-right: 16px; 
+  display: flex; 
+  align-items: center;
+  opacity: 0.8;
+}
 
 #topicInput {
   background: transparent;
   border: none;
   color: var(--text-main);
-  font-size: 16px;
-  padding: 14px 0;
+  font-size: 18px;
+  padding: 18px 0;
   width: 100%;
   outline: none;
+  font-weight: 500;
+}
+
+#topicInput::placeholder {
+  color: var(--text-dim);
+  opacity: 0.35; /* Even less prominent as requested */
 }
 
 .input-actions {
@@ -371,26 +406,31 @@ body.light-mode .theme-btn .material-symbols-rounded {
   background: rgba(168, 85, 247, 0.1);
   color: var(--accent-purple);
   border: 1.5px solid rgba(168, 85, 247, 0.6);
-  padding: 12px 28px;
+  padding: 14px 32px;
   border-radius: 10px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 0 15px var(--control-glow);
   position: relative;
   overflow: hidden;
 }
 
-#generateButton:hover:not(:disabled) {
-  transform: scale(1.03);
+#generateButton:hover:not(:disabled), #generateButton.active-feedback {
+  transform: scale(1.05);
   background: rgba(168, 85, 247, 0.2);
   border-color: var(--accent-purple);
-  color: var(--accent-purple);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+}
+
+#generateButton.active-feedback {
+  transform: scale(0.95);
+  transition: transform 0.1s;
 }
 
 /* SESSION PROGRESS */
@@ -486,7 +526,7 @@ body.light-mode .theme-btn .material-symbols-rounded {
 /* Overview Content Specifics */
 #overviewText { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 16px; white-space: pre-wrap; }
 .overview-actions { display: flex; justify-content: flex-end; margin-bottom: 24px; }
-.overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
+.overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; }
 
 /* Flashcards Grid */
 .flashcards-grid {
@@ -519,14 +559,29 @@ body.light-mode .theme-btn .material-symbols-rounded {
   padding: 24px;
   border-radius: 20px;
   background: var(--bg-card);
-  border: 1px solid var(--border);
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
 
-.flashcard-front { z-index: 2; transform: rotateY(0deg); }
-.flashcard-back { transform: rotateY(180deg); }
+.flashcard-front { 
+  z-index: 2; 
+  transform: rotateY(0deg); 
+  border: 1.5px solid rgba(168, 85, 247, 0.3); /* Mastery Purple Stroke */
+}
+
+.flashcard-back { 
+  transform: rotateY(180deg); 
+  border: 1.5px solid rgba(59, 130, 246, 0.3); /* Discovery Blue Stroke */
+}
+
+/* Completion Color Styling */
+.flashcard.is-viewed .flashcard-front,
+.flashcard.is-viewed .flashcard-back {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+}
 
 .status-check { font-size: 20px; color: var(--accent-green); opacity: 0; transition: 0.3s; }
 .is-viewed .status-check { opacity: 1; }
@@ -539,7 +594,7 @@ body.light-mode .theme-btn .material-symbols-rounded {
   text-align: center;
 }
 
-.term { font-size: 18px; font-weight: 700; color: var(--text-main); }
+.term { font-size: 18px; font-weight: 500; color: var(--text-main); } /* Reduced from 700 */
 .definition { font-size: 13px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
 
 .card-sources { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }

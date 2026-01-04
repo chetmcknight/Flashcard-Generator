@@ -35,6 +35,7 @@ const ringLabel = document.getElementById('ringLabel') as HTMLDivElement;
 const cardCountLabel = document.getElementById('cardCountLabel') as HTMLSpanElement;
 const themeToggle = document.getElementById('themeToggle') as HTMLButtonElement;
 const moreInfoButton = document.getElementById('moreInfoButton') as HTMLButtonElement;
+const tenMoreButton = document.getElementById('tenMoreButton') as HTMLButtonElement;
 const regenerateCardsButton = document.getElementById('regenerateCardsButton') as HTMLButtonElement;
 
 const overviewSection = document.getElementById('overviewSection') as HTMLElement;
@@ -99,6 +100,9 @@ function performDeepClear() {
   // 5. Visibility Reset
   progressContainer.classList.remove('is-loading');
   regenerateCardsButton.classList.add('hidden');
+  tenMoreButton.classList.add('hidden');
+  overviewSection.classList.add('is-collapsed');
+  resultsSection.classList.add('is-collapsed');
   
   // 6. Focus restoration
   generateButton.disabled = false;
@@ -126,6 +130,11 @@ function init() {
       currentTopic = data.topic;
       renderDeck(data.deck, data.topic);
       regenerateCardsButton.classList.remove('hidden');
+      tenMoreButton.classList.remove('hidden');
+      
+      // Auto-expand on restoration if content exists
+      overviewSection.classList.remove('is-collapsed');
+      resultsSection.classList.remove('is-collapsed');
     } catch (e) {
       console.error("Failed to restore session", e);
     }
@@ -202,6 +211,46 @@ function stopLoadingSimulation() {
   progressContainer.classList.remove('is-loading');
 }
 
+function createCardElement(card: Flashcard, index: number, topic: string) {
+  const cardEl = document.createElement('div');
+  cardEl.className = `flashcard ${viewedCards.has(index) ? 'is-viewed' : ''}`;
+  
+  const sourcesHtml = card.sources.map(s => `
+    <a href="${s.url}" target="_blank" class="source-link" onclick="event.stopPropagation()">
+      ${s.title}
+    </a>
+  `).join('');
+
+  cardEl.innerHTML = `
+    <div class="flashcard-inner">
+      <div class="flashcard-front">
+        <div class="card-top">
+          <span class="card-label">CARD ${index + 1}</span>
+          <span class="material-symbols-rounded status-check">check_circle</span>
+        </div>
+        <div class="term"><div>${card.term}</div></div>
+      </div>
+      <div class="flashcard-back">
+        <div class="card-top"><span class="def-label">Knowledge Definition</span></div>
+        <div class="definition"><div>${card.definition}</div></div>
+        ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="width: 100%;">Grounding Sources</span>${sourcesHtml}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  cardEl.addEventListener('click', () => {
+    cardEl.classList.toggle('flipped');
+    if (!viewedCards.has(index)) {
+      viewedCards.add(index);
+      cardEl.classList.add('is-viewed');
+      updateStudyProgress();
+      saveSession(topic);
+    }
+  });
+
+  return cardEl;
+}
+
 function renderDeck(data: GenerationResponse, topic: string) {
   flashcardsContainer.innerHTML = '';
   
@@ -218,43 +267,7 @@ function renderDeck(data: GenerationResponse, topic: string) {
   // Render Cards
   cardCountLabel.textContent = data.flashcards.length.toString();
   data.flashcards.forEach((card, index) => {
-    const cardEl = document.createElement('div');
-    cardEl.className = `flashcard ${viewedCards.has(index) ? 'is-viewed' : ''}`;
-    
-    const sourcesHtml = card.sources.map(s => `
-      <a href="${s.url}" target="_blank" class="source-link" onclick="event.stopPropagation()">
-        ${s.title}
-      </a>
-    `).join('');
-
-    cardEl.innerHTML = `
-      <div class="flashcard-inner">
-        <div class="flashcard-front">
-          <div class="card-top">
-            <span class="card-label">CARD ${index + 1}</span>
-            <span class="material-symbols-rounded status-check">check_circle</span>
-          </div>
-          <div class="term"><div>${card.term}</div></div>
-        </div>
-        <div class="flashcard-back">
-          <div class="card-top"><span class="def-label">Knowledge Definition</span></div>
-          <div class="definition"><div>${card.definition}</div></div>
-          ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="width: 100%;">Grounding Sources</span>${sourcesHtml}</div>` : ''}
-        </div>
-      </div>
-    `;
-
-    cardEl.addEventListener('click', () => {
-      cardEl.classList.toggle('flipped');
-      if (!viewedCards.has(index)) {
-        viewedCards.add(index);
-        cardEl.classList.add('is-viewed');
-        updateStudyProgress();
-        saveSession(topic);
-      }
-    });
-
-    flashcardsContainer.appendChild(cardEl);
+    flashcardsContainer.appendChild(createCardElement(card, index, topic));
   });
   
   updateStudyProgress();
@@ -346,6 +359,11 @@ async function handleGenerate(isRegenerate = false) {
     saveSession(topic);
     stopLoadingSimulation();
     regenerateCardsButton.classList.remove('hidden');
+    tenMoreButton.classList.remove('hidden');
+    
+    // Uncollapse panels once content is ready
+    overviewSection.classList.remove('is-collapsed');
+    resultsSection.classList.remove('is-collapsed');
     
   } catch (error: any) {
     console.error(error);
@@ -379,7 +397,6 @@ async function handleMoreInfo() {
     const newText = response.text || "";
     const container = document.createElement('div');
     container.style.marginTop = "20px";
-    container.style.borderTop = "1px dashed var(--border)";
     container.style.paddingTop = "10px";
     container.innerHTML = `<strong>Extended Insights:</strong><br>${newText}`;
     overviewText.appendChild(container);
@@ -394,6 +411,82 @@ async function handleMoreInfo() {
   } finally {
     moreInfoButton.disabled = false;
     moreInfoButton.innerHTML = originalHtml;
+  }
+}
+
+async function handleTenMore() {
+  if (!currentTopic || !currentDeck || tenMoreButton.disabled) return;
+  
+  tenMoreButton.disabled = true;
+  const originalHtml = tenMoreButton.innerHTML;
+  tenMoreButton.innerHTML = `<span class="material-symbols-rounded" style="animation: spin 1s infinite linear;">sync</span> Growing Deck...`;
+  
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
+    const avoidListStr = `DO NOT use or repeat any of these terms: ${Array.from(usedTerms).join(', ')}.`;
+
+    const systemInstruction = `You are extending a study deck. 
+      Subject: "${currentTopic}".
+      Difficulty: ${selectedDifficulty.toUpperCase()}.
+
+      CRITICAL TASK: 
+      Generate exactly 10 NEW info cards that were NOT in the previous set. 
+      Focus on more specific details, niche sub-topics, or advanced applications.
+      
+      ${avoidListStr}
+
+      Format: JSON { "flashcards": [{term, definition, sources: [{url, title}]}] }`;
+
+    const result = await ai.models.generateContent({
+      model: selectedModel,
+      contents: `Generate 10 additional cards for the ${currentTopic} deck.`,
+      config: {
+        systemInstruction,
+        tools: [{ googleSearch: {} }],
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            flashcards: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  term: { type: Type.STRING },
+                  definition: { type: Type.STRING },
+                  sources: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { url: { type: Type.STRING }, title: { type: Type.STRING } }, required: ["url", "title"] } }
+                },
+                required: ["term", "definition", "sources"]
+              }
+            }
+          },
+          required: ["flashcards"]
+        }
+      },
+    });
+
+    const data = JSON.parse(result.text || '{}');
+    const newCards: Flashcard[] = data.flashcards || [];
+
+    // Append to existing deck state
+    const startIndex = currentDeck.flashcards.length;
+    newCards.forEach((card, i) => {
+      const actualIndex = startIndex + i;
+      currentDeck!.flashcards.push(card);
+      usedTerms.add(card.term.toLowerCase());
+      flashcardsContainer.appendChild(createCardElement(card, actualIndex, currentTopic));
+    });
+
+    cardCountLabel.textContent = currentDeck.flashcards.length.toString();
+    updateStudyProgress();
+    saveSession(currentTopic);
+    
+  } catch (e) {
+    console.error("Failed to fetch 10 more cards", e);
+  } finally {
+    tenMoreButton.disabled = false;
+    tenMoreButton.innerHTML = originalHtml;
   }
 }
 
@@ -432,9 +525,18 @@ if (moreInfoButton) {
   moreInfoButton.addEventListener('click', handleMoreInfo);
 }
 
+if (tenMoreButton) {
+  tenMoreButton.addEventListener('click', handleTenMore);
+}
+
 topicInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    handleGenerate(false);
+    // Provide visual feedback for the generate button
+    generateButton.classList.add('active-feedback');
+    setTimeout(() => {
+      generateButton.classList.remove('active-feedback');
+      handleGenerate(false);
+    }, 150);
   }
 });
 
