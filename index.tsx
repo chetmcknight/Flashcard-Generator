@@ -231,9 +231,9 @@ function createCardElement(card: Flashcard, index: number, topic: string) {
         <div class="term"><div>${card.term}</div></div>
       </div>
       <div class="flashcard-back">
-        <div class="card-top"><span class="def-label">Knowledge Definition</span></div>
+        <div class="card-top"><span class="def-label">${card.term}</span></div>
         <div class="definition"><div>${card.definition}</div></div>
-        ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="width: 100%;">Grounding Sources</span>${sourcesHtml}</div>` : ''}
+        ${sourcesHtml ? `<div class="card-sources"><span class="card-label" style="width: 100%;">Sources</span>${sourcesHtml}</div>` : ''}
       </div>
     </div>
   `;
@@ -493,7 +493,7 @@ async function handleTenMore() {
 // Global Event Listeners
 themeToggle.addEventListener('click', () => {
   const current = document.body.className;
-  const next = current === 'dark-mode' ? 'light-mode' : 'dark-mode';
+  const next = current === 'dark-mode' ? 'light-mode' : 'dark_mode';
   document.body.className = next;
   localStorage.setItem('study_deck_theme', next);
   updateThemeIcon(next);

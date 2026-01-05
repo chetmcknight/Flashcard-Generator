@@ -347,9 +347,9 @@ body.light-mode .theme-btn .material-symbols-rounded {
   font-size: 11px;
 }
 
-/* Specifically smaller for card numbering */
-.flashcard .card-label {
-  font-size: 10px;
+/* specifically smaller for card numbering and back label */
+.flashcard .card-label, .def-label {
+  font-size: 11px;
   letter-spacing: 1.2px;
 }
 
@@ -552,6 +552,15 @@ body.light-mode .theme-btn .material-symbols-rounded {
 
 .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 
+/* Added .card-top for layout */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
 .flashcard-front, .flashcard-back {
   position: absolute;
   top: 0; left: 0;
@@ -569,6 +578,11 @@ body.light-mode .theme-btn .material-symbols-rounded {
   z-index: 2; 
   transform: rotateY(0deg); 
   border: 1.5px solid rgba(168, 85, 247, 0.3); /* Mastery Purple Stroke */
+}
+
+/* Center header on back of card */
+.flashcard-back .card-top {
+  justify-content: center;
 }
 
 .flashcard-back { 
@@ -594,8 +608,8 @@ body.light-mode .theme-btn .material-symbols-rounded {
   text-align: center;
 }
 
-.term { font-size: 18px; font-weight: 500; color: var(--text-main); } /* Reduced from 700 */
-.definition { font-size: 13px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
+.term { font-size: 24px; font-weight: 500; color: var(--text-main); }
+.definition { font-size: 11px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
 
 .card-sources { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .source-link { font-size: 9px; color: var(--accent-blue); text-decoration: none; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 6px; }
@@ -606,6 +620,8 @@ body.light-mode .theme-btn .material-symbols-rounded {
 .hidden { display: none; }
 
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
 .is-loading .ring-label { animation: pulse 1.5s infinite; }
 
 /* --- Mobile Responsive Styles --- */
