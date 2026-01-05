@@ -567,6 +567,18 @@ body.light-mode .theme-btn .material-symbols-rounded {
 .overview-actions { display: flex; justify-content: flex-end; margin-bottom: 24px; }
 .overview-sources { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 16px; }
 
+.overview-disclaimer {
+  font-size: 10px;
+  color: var(--text-dim);
+  opacity: 0.5;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
 /* Flashcards Grid */
 .flashcards-grid {
   display: grid;
