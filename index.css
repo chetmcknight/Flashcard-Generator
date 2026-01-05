@@ -288,7 +288,7 @@ body.light-mode .theme-btn .material-symbols-rounded {
   background: var(--bg-card);
   border: 1.5px solid var(--border); /* Neutral border for visibility */
   border-radius: 16px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Faster 0.3s transition to match buttons */
   box-shadow: var(--card-shadow); /* Shadow in light mode for visibility */
   overflow: hidden;
 }
@@ -307,7 +307,6 @@ body.light-mode .theme-btn .material-symbols-rounded {
 .input-card:hover, .input-card:focus-within {
   border-color: var(--accent-purple);
   box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15);
-  transform: translateY(-2px);
 }
 
 /* Hover state for Big Windows */
@@ -325,7 +324,7 @@ body.light-mode .theme-btn .material-symbols-rounded {
   min-height: 160px;
   align-items: center; 
   text-align: center; 
-  justify-content: flex-start;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -338,22 +337,62 @@ body.light-mode .theme-btn .material-symbols-rounded {
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 600; /* Reduced from 800 */
-  color: var(--text-dim);
+  color: var(--accent-blue);
   letter-spacing: 1.5px;
   margin: 0;
 }
 
-.session-label {
-  font-size: 11px;
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-/* specifically smaller for card numbering and back label */
-.flashcard .card-label, .def-label {
+.clear-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 8px 16px; /* Increased padding around text */
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clear-btn:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.clear-btn .material-symbols-rounded {
+  font-size: 14px;
+}
+
+.session-label {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* specifically smaller for card numbering */
+.flashcard .card-label {
   font-size: 11px;
   letter-spacing: 1.2px;
 }
 
-.def-label { color: var(--accent-blue); }
+/* Increased size for back label (Subject Names) */
+.def-label { 
+  color: var(--accent-blue); 
+  font-size: 13px;
+  letter-spacing: 1.2px;
+}
 
 /* SEPARATORS REMOVED - Removed inner stroke from search input */
 .search-input-wrapper {
@@ -372,13 +411,13 @@ body.light-mode .theme-btn .material-symbols-rounded {
   background: rgba(168, 85, 247, 0.08);
 }
 
-.search-icon { 
-  color: var(--accent-purple); 
-  font-size: 32px; 
-  margin-right: 16px; 
-  display: flex; 
-  align-items: center;
-  opacity: 0.8;
+.search-icon-custom { 
+  width: 26px; 
+  height: 26px; 
+  margin-right: 12px; 
+  object-fit: contain; 
+  display: block;
+  flex-shrink: 0;
 }
 
 #topicInput {
@@ -608,14 +647,24 @@ body.light-mode .theme-btn .material-symbols-rounded {
   text-align: center;
 }
 
-.term { font-size: 24px; font-weight: 500; color: var(--text-main); }
-.definition { font-size: 11px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
+.term { font-size: 22px; font-weight: 500; color: var(--text-main); }
+.definition { font-size: 13px; color: var(--text-dim); line-height: 1.6; overflow-y: auto; }
 
 .card-sources { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .source-link { font-size: 9px; color: var(--accent-blue); text-decoration: none; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 6px; }
 
-.app-footer { margin-top: 60px; padding: 24px 0; border-top: 1px solid var(--border); display: flex; justify-content: center; }
+.app-footer { 
+  margin-top: 60px; 
+  padding: 24px 0; 
+  border-top: 1px solid var(--border); 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  gap: 12px;
+}
 .disclaimer { font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; opacity: 0.6; }
+.copyright { font-size: 10px; color: var(--text-dim); opacity: 0.5; }
 
 .hidden { display: none; }
 

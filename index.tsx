@@ -37,6 +37,7 @@ const themeToggle = document.getElementById('themeToggle') as HTMLButtonElement;
 const moreInfoButton = document.getElementById('moreInfoButton') as HTMLButtonElement;
 const tenMoreButton = document.getElementById('tenMoreButton') as HTMLButtonElement;
 const regenerateCardsButton = document.getElementById('regenerateCardsButton') as HTMLButtonElement;
+const clearSubjectButton = document.getElementById('clearSubjectButton') as HTMLButtonElement;
 
 const overviewSection = document.getElementById('overviewSection') as HTMLElement;
 const overviewToggle = document.getElementById('overviewToggle') as HTMLElement;
@@ -211,12 +212,27 @@ function stopLoadingSimulation() {
   progressContainer.classList.remove('is-loading');
 }
 
+// Helper to ensure URLs are absolute and functional
+function sanitizeUrl(url: string): string {
+  try {
+    if (!url) return '#';
+    // Check if it starts with http:// or https://
+    if (/^https?:\/\//i.test(url)) {
+      return url;
+    }
+    // Assume https if protocol missing
+    return `https://${url}`;
+  } catch (e) {
+    return '#';
+  }
+}
+
 function createCardElement(card: Flashcard, index: number, topic: string) {
   const cardEl = document.createElement('div');
   cardEl.className = `flashcard ${viewedCards.has(index) ? 'is-viewed' : ''}`;
   
-  const sourcesHtml = card.sources.map(s => `
-    <a href="${s.url}" target="_blank" class="source-link" onclick="event.stopPropagation()">
+  const sourcesHtml = (card.sources || []).map(s => `
+    <a href="${sanitizeUrl(s.url)}" target="_blank" rel="noopener noreferrer" class="source-link" onclick="event.stopPropagation()">
       ${s.title}
     </a>
   `).join('');
@@ -257,8 +273,8 @@ function renderDeck(data: GenerationResponse, topic: string) {
   // Render Overview
   overviewTitle.textContent = topic;
   overviewText.innerHTML = data.overview;
-  overviewSources.innerHTML = data.overviewSources.map(s => `
-    <a href="${s.url}" target="_blank" class="source-link">
+  overviewSources.innerHTML = (data.overviewSources || []).map(s => `
+    <a href="${sanitizeUrl(s.url)}" target="_blank" rel="noopener noreferrer" class="source-link">
       <span class="material-symbols-rounded" style="font-size: 14px; margin-right: 4px;">link</span>
       ${s.title}
     </a>
@@ -527,6 +543,12 @@ if (moreInfoButton) {
 
 if (tenMoreButton) {
   tenMoreButton.addEventListener('click', handleTenMore);
+}
+
+if (clearSubjectButton) {
+  clearSubjectButton.addEventListener('click', () => {
+    performDeepClear();
+  });
 }
 
 topicInput.addEventListener('keydown', (e) => {

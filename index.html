@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mastery Deck AI</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 14s1.5 2 4 2 4-2 4-2'/%3E%3Cline x1='9' y1='9' x2='9.01' y2='9'/%3E%3Cline x1='15' y1='9' x2='15.01' y2='9'/%3E%3C/svg%3E">
   <script type="importmap">
     {
       "imports": {
@@ -60,12 +61,16 @@
 
       <div class="input-dashboard">
         <div class="input-card">
-          <div class="card-header">
-            <span class="card-label">Subject Entry</span>
+          <div class="card-header-row">
+            <span class="card-label">Enter Subject</span>
+            <button id="clearSubjectButton" class="clear-btn" title="Clear All Content">
+              <span class="material-symbols-rounded">delete</span>
+              Clear Subject
+            </button>
           </div>
           <div class="search-input-wrapper">
-            <span class="material-symbols-rounded search-icon">psychology</span>
-            <input type="text" id="topicInput" placeholder="Enter a subject to master (e.g. Quantum Physics, Roman History)..." />
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 14s1.5 2 4 2 4-2 4-2'/%3E%3Cline x1='9' y1='9' x2='9.01' y2='9'/%3E%3Cline x1='15' y1='9' x2='15.01' y2='9'/%3E%3C/svg%3E" class="search-icon-custom" alt="Smile Icon" />
+            <input type="text" id="topicInput" placeholder="Enter a subject to master (e.g. Quantum Physics, Roman History...)" />
           </div>
           <div class="input-actions">
             <button id="generateButton">
@@ -144,6 +149,7 @@
           <span class="material-symbols-rounded" style="font-size: 14px;">info</span>
           AI-generated content can contain factual errors. Always verify critical information with primary sources.
         </div>
+        <div class="copyright">copyright 2026 all rights reserved. Chet McKnight</div>
       </footer>
     </main>
   </div>
