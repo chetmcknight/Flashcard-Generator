@@ -27,7 +27,6 @@ const generateButton = document.getElementById('generateButton') as HTMLButtonEl
 const flashcardsContainer = document.getElementById('flashcardsContainer') as HTMLDivElement;
 const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
 const difficultyButtons = document.querySelectorAll('#difficultySelector .pill-btn');
-const modelButtons = document.querySelectorAll('#modelSelector .pill-btn');
 const quantitySelector = document.getElementById('quantitySelector') as HTMLSelectElement;
 const loadingCircle = document.getElementById('loadingCircle') as unknown as SVGCircleElement;
 const progressContainer = document.getElementById('progressContainer') as HTMLDivElement;
@@ -520,14 +519,6 @@ difficultyButtons.forEach(btn => {
     difficultyButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectedDifficulty = (btn as HTMLButtonElement).dataset.level || 'medium';
-  });
-});
-
-modelButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    modelButtons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedModel = (btn as HTMLButtonElement).dataset.model || 'gemini-3-flash-preview';
   });
 });
 
